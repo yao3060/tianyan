@@ -21,7 +21,7 @@ get_header();
 
 					<?php while ( have_posts() ) : the_post(); ?>
 
-                        <section id="features0" class="section-features section-padding onepage-section">
+                        <section id="features0" class="hide section-features section-padding onepage-section">
                             <div class="container">
 
                                 <div class="section-title-area">
@@ -65,23 +65,26 @@ get_header();
                             $legend[] = $title;
 
                             $fund_data = get_field('fund_data');
+
                             $fund_datas[$id] = $fund_data;
-                            $latest_account[$id] = array_column($fund_data, 'latest_account');
+                            $tmp_fund_data = $latest_account[$id] = array_column($fund_data, 'net_value');
+
                             $titles[$id] = $title;
 
+                            $tmp_account_date   = array_column($fund_data, 'account_date');
 
                             if( '' == $account_date ) {
-
                                 $account_date = array_column($fund_data, 'account_date');
-
                             } else {
-
-                                $tmp_account_date = array_column($fund_data, 'account_date');
                                 $account_date = array_merge($account_date, $tmp_account_date);
-
                             }
 
-                            $product_info .= '<tr>
+                            $product_info .= '
+                                                <script>
+                                                var account_date_'.$id.' = '. json_encode($tmp_account_date) .';
+                                                var fund_data_'.$id.' = '. json_encode($tmp_fund_data) .';
+                                                </script>
+                                                <tr>
                                                     <th scope="row">'. $title .'</th>
                                                     <td title="净值日期">' . end($account_date) . '</td>
                                                     <td title="最新净值">' . end($latest_account[$id]) . '</td>
@@ -95,6 +98,8 @@ get_header();
 
                         $account_date = array_values($account_date);
 
+//                        print_r($account_date);
+//                        print_r($fund_datas);
 
                         $series = [];
 
@@ -103,11 +108,19 @@ get_header();
                             $data = [];
                             foreach ($account_date as $adate) {
 
-                                foreach ($fund_datas[$id] as $value) {
-                                    if($value['account_date'] == $adate) {
-                                        $data[] = $value['latest_account'];
-                                    }
+//                                foreach ($fund_datas[$id] as $value) {
+//                                    if($value['account_date'] == $adate) {
+//                                        $data[$adate] = $value['net_value'];
+//                                    }
+//                                }
+
+                                $key = array_search($adate, array_column($fund_datas[$id], 'account_date'));
+                                if ($key){
+                                    $data[] = isset($fund_datas[$id][$key]['account_date']) ? $fund_datas[$id][$key]['net_value'] : 0;
+                                }else{
+                                    $data[] = 0;
                                 }
+
 
                             }
 
@@ -120,6 +133,8 @@ get_header();
                             $series[] =  $serie;
                         }
 
+                        //print_r($series);die;
+
                         ?>
 
 
@@ -130,11 +145,11 @@ get_header();
                             </div>
 
                             <div class="section-content">
-                                <div class="row">
+                                <div class="">
                                     <table class="table">
                                         <thead class="thead-light">
                                         <tr>
-                                            <th scope="col">产品名称</th>
+                                            <th scope="col" width="40%">产品名称</th>
                                             <th scope="col">净值日期</th>
                                             <th scope="col">最新净值</th>
                                             <th scope="col">今年收益</th>
@@ -158,7 +173,7 @@ get_header();
 
                                 <div class="section-content">
                                     <div class="row">
-                                        <div id="products-chart" style="width: 100%;height:600px;"></div>
+                                        <div id="products-chart" style="width: 100%;height:<?php echo wp_is_mobile()? 400 : 600 ?>px;"></div>
                                     </div>
                                 </div>
 
@@ -173,8 +188,8 @@ get_header();
                                 </div>
 
                                 <div class="section-content">
-                                    <div class="row">
-                                        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" style="width: 100%">
+
+                                        <div id="carouselExampleControls" class="carousel slide" data-interval="false" data-ride="carousel" style="width: 100%">
 
                                             <div class="carousel-inner">
 
@@ -201,8 +216,8 @@ get_header();
                                                                 <td><?php echo get_field('total_overfulfil', $id ); ?></td>
                                                             </tr>
                                                             <tr>
-                                                                <td colspan="5">
-                                                                    <img class="d-block w-100" src="<?php echo get_field('chart', $id); ?>" alt="First slide">
+                                                                <td colspan="5" style="">
+                                                                    <div class="product-chart" data-id="<?php echo $id ?>" id="chart-<?php echo $id ?>" style="width: 100%;height:<?php echo wp_is_mobile()? 400 : 600 ?>px;"></div>
                                                                 </td>
                                                             </tr>
                                                             </tbody>
@@ -222,7 +237,6 @@ get_header();
                                             </a>
                                         </div>
 
-                                    </div>
                                 </div>
 
                             </div>
@@ -283,5 +297,45 @@ get_header();
     // 使用刚指定的配置项和数据显示图表。
     myChart.setOption(option);
 
+    var $chart_id = jQuery('.carousel-item.active').find('.product-chart').data('id');
+    var single_myChart = echarts.init(document.getElementById('chart-' + $chart_id));
+    var single_option = {
+        xAxis: {
+            type: 'category',
+            data: eval('account_date_' + $chart_id)
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [{
+            data: eval('fund_data_' + $chart_id),
+            type: 'line'
+        }]
+    };
+    single_myChart.setOption(single_option);
+
+    jQuery('#carouselExampleControls').on('slid.bs.carousel', function () {
+        // do something…
+        var $product_chart = jQuery(this).find('.active').find('.product-chart');
+        var $chart_id = $product_chart.data('id');
+        var single_myChart2 = echarts.init(document.getElementById('chart-' + $chart_id));
+        var single_option2 = {
+            xAxis: {
+                type: 'category',
+                data: eval('account_date_' + $chart_id)
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: eval('fund_data_' + $chart_id),
+                type: 'line'
+            }]
+        };
+
+        single_myChart2.setOption(single_option2);
+    })
+
 </script>
+
 <?php get_footer(); ?>

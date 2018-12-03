@@ -11,8 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 */
 function mlw_qmn_show_adverts() {
 
-	return "";
-
 	$mlw_advert = "";
 	$mlw_advert_text = "";
 	if ( 'true' == get_option( 'mlw_advert_shows' ) ) {

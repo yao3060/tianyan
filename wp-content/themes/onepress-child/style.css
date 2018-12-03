@@ -11,6 +11,12 @@
  Tags:         light, dark, two-columns, right-sidebar, responsive-layout, accessibility-ready
  Text Domain:  tianyan
 */
+#page {
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-style: normal;
+  font-weight: initial;
+  text-transform: None;
+}
 #page h1,
 #page h2,
 #page h3,
@@ -22,5 +28,60 @@
 }
 #page img.custom-logo {
   max-width: 200px;
+}
+#page .site-header {
+  box-shadow: none;
+}
+#page .page-header .entry-title,
+#page .page-header .page-title {
+  font-weight: normal;
+}
+#page .section-title-area .section-title {
+  font-weight: normal;
+}
+#page .section-content table th,
+#page .section-content table td {
+  font-weight: normal;
+}
+#page .section-content table th {
+  vertical-align: middle;
+}
+#page .section-content .carousel-control-next-icon,
+#page .section-content .carousel-control-prev-icon {
+  width: 40px;
+  height: 40px;
+  background-color: #000;
+  background-size: 50% 50%;
+}
+@media (max-width: 767px) {
+  #page .page-header {
+    padding: 15px 0;
+  }
+  #page .page-header .entry-title,
+  #page .page-header .page-title {
+    font-weight: normal;
+    font-size: 1.25em;
+  }
+  #page #primary {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+  #page #main .table th,
+  #page #main .table td {
+    font-weight: normal;
+  }
+  #page #main .table th {
+    vertical-align: middle;
+  }
+  #page #main .section-padding {
+    padding: 2rem 0px;
+  }
+  #page #main .section-title-area {
+    margin-bottom: 2rem;
+  }
+  #page #main .section-title-area .section-title {
+    font-size: 1.5rem;
+    font-weight: normal;
+  }
 }
 /*# sourceMappingURL=style.css.map */

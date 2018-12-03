@@ -14,6 +14,11 @@
 
 #page {
 
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-style: normal;
+  font-weight: initial;
+  text-transform: None;
+
   h1, h2, h3, h4, h5, h6, .onepress-menu a {
     color: #666;
   }
@@ -22,4 +27,97 @@
     max-width: 200px;
   }
 
+  .site-header {
+    box-shadow:none;
+  }
+
+  .page-header {
+    .entry-title,
+    .page-title{
+      font-weight:normal;
+    }
+  }
+
+  .section-title-area {
+
+    .section-title {
+      font-weight:normal;
+    }
+  }
+
+  .section-content {
+    table {
+      th, td {
+        font-weight: normal;
+      }
+
+      th {
+        vertical-align: middle;
+      }
+    }
+
+    .carousel-control-next-icon,
+    .carousel-control-prev-icon {
+      width: 40px;
+      height: 40px;
+      background-color: #000;
+      background-size: 50% 50%;
+    }
+  }
 }
+
+@media (max-width: 767px){
+
+  #page {
+
+    .page-header {
+      padding: 15px 0;
+      .entry-title,
+      .page-title {
+        font-weight: normal;
+        font-size: 1.25em;
+      }
+    }
+
+    #primary {
+      padding-top: 15px;
+      padding-bottom: 15px;
+
+      .entry-content {
+
+      }
+
+    }
+
+    #main {
+
+      .table {
+
+        th, td {
+          font-weight: normal;
+        }
+
+        th {
+          vertical-align: middle;
+        }
+
+      }
+
+
+      .section-padding {
+        padding: 2rem 0px;
+      }
+      .section-title-area  {
+
+        margin-bottom: 2rem;
+
+        .section-title {
+          font-size: 1.5rem;
+          font-weight:normal;
+        }
+      }
+
+    }
+  }
+}
+

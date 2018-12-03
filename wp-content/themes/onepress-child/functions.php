@@ -10,6 +10,15 @@
  * Disable responsive image support (test!)
  */
 
+function onepress_footer_site_info()
+{
+    ?>
+    <?php printf(esc_html__('Copyright %1$s %2$s %3$s', 'onepress'), '&copy;', esc_attr(date('Y')), esc_attr(get_bloginfo())); ?>
+<!--    <span class="sep"> &ndash; </span>-->
+    <?php
+}
+
+
 // Clean the up the image from wp_get_attachment_image()
 add_filter( 'wp_get_attachment_image_attributes', function( $attr )
 {
@@ -35,9 +44,9 @@ remove_filter( 'the_content', 'wp_make_content_images_responsive' );
 
 function my_theme_enqueue_styles() {
 
-    $parent_style = 'parent-style'; // This is 'twentyfifteen-style' for the Twenty Fifteen theme.
+    $parent_style = 'onepress-style'; // This is 'twentyfifteen-style' for the Twenty Fifteen theme.
 
-    wp_enqueue_style( $parent_style, get_template_directory_uri() . '/style.css' );
+    //wp_enqueue_style( $parent_style, get_template_directory_uri() . '/style.css' );
     wp_enqueue_style( 'child-style',
         get_stylesheet_directory_uri() . '/style.css',
         array( $parent_style ),
@@ -49,7 +58,6 @@ function my_theme_enqueue_styles() {
     endif;
 }
 add_action( 'wp_enqueue_scripts', 'my_theme_enqueue_styles' );
-
 
 add_filter( 'user_contactmethods', function ($methods, $user){
     $methods = array(
@@ -87,12 +95,23 @@ function tianyan_posts() {
 
     // The Loop
     if ( $the_query->have_posts() ) {
-        $output .= '<ul>';
+
+
+        add_filter( 'excerpt_length', function ($length){ return 99; }, 999 );
+
+        $output .= '<div class="section-news">';
         while ( $the_query->have_posts() ) {
             $the_query->the_post();
-            $output .= '<li><a target="_blank" href="'. get_the_permalink() .'">' . get_the_title() . '</a></li>';
+            $output .= '<article class="list-article clearfix post status-publish format-standard hentry">
+                            <div class="list-article-content">
+                                <header class="entry-header">
+                                    <h2 class="entry-title"><a target="_blank" href="'. get_the_permalink() .'">' . get_the_title() . '</a> </h2>
+                                </header>
+                                <div class="entry-excerpt"><p>'. get_the_excerpt() .'</p></div>
+                            </div>
+                        </article>';
         }
-        $output .= '</ul>';
+        $output .= '</div>';
 
 
         $total = ceil($the_query->found_posts/$posts_per_page ); // need an unlikely integer
@@ -111,13 +130,15 @@ function tianyan_posts() {
         $pagination = str_replace("<ul class='page-numbers'>", "<ul class='pagination'>", $pagination);
         $pagination = str_replace("<li>", "<li class=\"page-item\">", $pagination);
         $pagination = str_replace("page-numbers", "page-link", $pagination);
-        $output .= '<nav id="cdp_pagination" class="text-center clearfix" aria-label="Page navigation">' .$pagination. '</nav>';
+        $output .= '<nav id="cdp_pagination" style="padding-top: 30px;" class="text-center clearfix" aria-label="Page navigation">' .$pagination. '</nav>';
 
-        /* Restore original Post Data */
-        wp_reset_postdata();
     } else {
         // no posts found
     }
+
+
+    /* Restore original Post Data */
+    wp_reset_postdata();
 
     return $output;
 }
@@ -220,3 +241,6 @@ add_action('wp_footer', function (){
 
 <?php
 });
+
+
+
