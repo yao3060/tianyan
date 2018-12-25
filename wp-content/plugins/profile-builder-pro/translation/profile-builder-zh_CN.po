@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Profile Builder package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2018-09-09 16:46+0000\n"
+"PO-Revision-Date: 2018-12-25 13:29+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -5367,7 +5367,7 @@ msgstr "非常弱"
 
 #: ../profile-builder-2.0/features/functions.php:623
 msgid "Minimum length of %d characters."
-msgstr ""
+msgstr "密码至少应包括%s个字符。"
 
 #: ../profile-builder-2.0/features/functions.php:634
 msgid "The password must have a minimum strength of %s."

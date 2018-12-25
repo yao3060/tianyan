@@ -28,32 +28,33 @@ function getMounthFirstDates($dates) {
 ?>
 <?php if( !is_user_logged_in()): ?>
     <?php while ( have_posts() ) : the_post(); ?>
-    <div class="inside-wrap">
 
-        <div class="inside-logo">
-            <a href="/" border="0">
-                <?php echo wp_get_attachment_image( get_theme_mod( 'custom_logo' ), 'full', false ) ?>
-            </a>
+        <div class="container" data-class="inside-wrap">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div id="primary" class="content-area">
+                        <main id="main" class="site-main">
+
+                            <a href="/" border="0">
+                                <img class="top-logo" src="<?php echo get_stylesheet_directory_uri() ?>/images/logo.png" style="width: 200px; height: auto;">
+                            </a>
+
+                            <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+
+                                <div class="entry-content">
+
+                                    <?php the_content();?>
+
+                                </div>
+
+                            </article>
+                        </main><!-- #main -->
+                    </div><!-- #primary -->
+                </div>
+            </div>
+
         </div>
 
-
-        <div id="primary" class="content-area right-column">
-            <main id="main" class="site-main">
-
-                <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-                    
-                    <header class="entry-header">
-                        <?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
-                    </header><!-- .entry-header -->
-                    <div class="entry-content">
-                        <?php the_content();?>		
-                    </div>				
-                    
-                </article>
-                
-            </main><!-- #main -->
-        </div><!-- #primary -->
-    </div>
     <?php endwhile; // End of the loop. ?>
 
 <?php else: ?>
